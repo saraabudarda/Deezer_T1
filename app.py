@@ -19,7 +19,21 @@ Contains constants, color schemes, and settings
 """
 
 # Dataset paths
-DATA_DIR = "."
+# Dataset paths
+# Robustly determine DATA_DIR by searching for train.csv
+current_script_dir = os.path.dirname(os.path.abspath(__file__))
+possible_dirs = [
+    ".",                                            # Current working directory
+    current_script_dir,                             # Directory of the script
+    os.path.join(current_script_dir, ".."),         # Parent directory
+]
+
+DATA_DIR = "." # Default fallback
+for d in possible_dirs:
+    if os.path.exists(os.path.join(d, "train.csv")):
+        DATA_DIR = d
+        break
+
 TRAIN_FILE = "train.csv"
 VALIDATION_FILE = "validation.csv"
 TEST_FILE = "test.csv"
@@ -1877,5 +1891,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
 
 
